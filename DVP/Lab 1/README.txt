@@ -24,12 +24,15 @@ python3 "DVP/Lab 1/Code/lab1_image_processing.py"
 Input dataset:
 DVP/Dataset/Lab 1/sample.ppm
 
+Important:
+The supplied dataset image must remain present; the program does not generate a fallback image.
+
 Image properties used for this submission:
 - Width: 128px
 - Height: 96px
 - Channels: 3 (RGB)
 - Format: ASCII PPM (P3) dataset with SVG outputs
-- Subject: supplied hot-air-balloon image against a blue sky only; no generated replacement image is used
+- Subject: supplied hot-air-balloon image against a blue sky
 
 Output folder:
 DVP/Lab 1/Image Output/
