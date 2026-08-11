@@ -29,7 +29,7 @@ Image properties used for this submission:
 - Height: 96px
 - Channels: 3 (RGB)
 - Format: ASCII PPM (P3) dataset with SVG outputs
-- Subject: supplied hot-air-balloon image only; no generated replacement image is used
+- Subject: supplied hot-air-balloon image against a blue sky only; no generated replacement image is used
 
 Output folder:
 DVP/Lab 1/Image Output/
