@@ -41,6 +41,72 @@ class Image:
         return cls(width, height, pixels)
 
     @classmethod
+    def hot_air_balloons(cls, width: int = 128, height: int = 96) -> "Image":
+        """Create a small hot-air-balloon sample image for Lab 1."""
+        pixels: list[list[Pixel]] = []
+        for y in range(height):
+            row: list[Pixel] = []
+            for x in range(width):
+                sky = int(190 + 35 * y / max(1, height - 1))
+                row.append((95 + y // 8, sky, 235))
+            pixels.append(row)
+
+        def put(x: int, y: int, color: Pixel) -> None:
+            if 0 <= x < width and 0 <= y < height:
+                pixels[y][x] = color
+
+        def draw_balloon(cx: int, cy: int, rx: int, ry: int, palette: list[Pixel], basket: Pixel) -> None:
+            for y in range(cy - ry, cy + ry + 1):
+                for x in range(cx - rx, cx + rx + 1):
+                    nx = (x - cx) / rx
+                    ny = (y - cy) / ry
+                    if nx * nx + ny * ny <= 1.0:
+                        stripe = int((x - (cx - rx)) / max(1, (2 * rx + 1) / len(palette)))
+                        color = palette[max(0, min(len(palette) - 1, stripe))]
+                        shade = 1.0 - 0.28 * abs(nx) - 0.12 * max(0, ny)
+                        put(x, y, tuple(clamp(c * shade) for c in color))
+            # lower dark band, cords, and basket
+            for y in range(cy + int(ry * 0.62), cy + int(ry * 0.80)):
+                for x in range(cx - int(rx * 0.45), cx + int(rx * 0.45) + 1):
+                    if ((x - cx) / rx) ** 2 + ((y - cy) / ry) ** 2 <= 1.0:
+                        put(x, y, (35, 35, 38))
+            bx1, bx2 = cx - 3, cx + 3
+            by1, by2 = cy + ry + 7, cy + ry + 13
+            for yy in range(cy + int(ry * 0.75), by1 + 1):
+                offset = yy - (cy + int(ry * 0.75))
+                put(cx - 8 + offset // 2, yy, (90, 90, 90))
+                put(cx + 8 - offset // 2, yy, (90, 90, 90))
+            for y in range(by1, by2 + 1):
+                for x in range(bx1, bx2 + 1):
+                    put(x, y, basket)
+
+        draw_balloon(
+            43,
+            35,
+            26,
+            27,
+            [
+                (255, 225, 35),
+                (75, 180, 210),
+                (255, 75, 80),
+                (245, 150, 35),
+                (245, 225, 45),
+                (35, 125, 150),
+                (220, 20, 45),
+            ],
+            (70, 190, 65),
+        )
+        draw_balloon(
+            91,
+            43,
+            23,
+            26,
+            [(245, 245, 90), (255, 45, 160), (230, 30, 135), (195, 20, 115), (255, 40, 150)],
+            (230, 45, 50),
+        )
+        return cls(width, height, pixels)
+
+    @classmethod
     def read_ppm(cls, path: str | Path) -> "Image":
         tokens: list[str] = []
         for line in Path(path).read_text(encoding="utf-8").splitlines():

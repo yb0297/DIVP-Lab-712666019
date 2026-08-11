@@ -9,7 +9,7 @@ OUTPUT = BASE / "Lab 1" / "Image Output"
 
 def load_image() -> Image:
     if not INPUT.exists():
-        Image.gradient().save_ppm(INPUT)
+        Image.hot_air_balloons().save_ppm(INPUT)
     return Image.read_ppm(INPUT)
 
 
