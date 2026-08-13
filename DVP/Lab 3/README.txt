@@ -1,52 +1,85 @@
-## Results
+Results
+1. Noise Suppression Using Averaging Filters
 
-The spatial filtering experiments were successfully performed on the degraded AGV camera image. The results demonstrate the effect of averaging filters, Laplacian sharpening, and unsharp/high-boost filtering on noise suppression and edge enhancement.
+Averaging filters were applied to the degraded AGV camera images with Gaussian noise levels of σ = 10 and σ = 25 using 3×3, 5×5, and 9×9 kernels.
 
-### 1. Noise Suppression Using Averaging Filters
+3×3: Provided moderate noise reduction while preserving most object boundaries and fine details.
+5×5: Produced stronger noise suppression with some loss of fine texture and edge sharpness.
+9×9: Provided the strongest smoothing, but significantly blurred obstacle boundaries and small structures.
 
-The noisy images generated with **σ = 10** and **σ = 25** were processed using averaging filters of sizes **3×3, 5×5, and 9×9**.
+The experiment demonstrates the trade-off between noise suppression and edge preservation. Larger kernels remove more noise but also remove more useful spatial information.
 
-The **3×3 filter** provided moderate noise reduction while preserving most object boundaries and fine image details. The **5×5 filter** produced stronger noise suppression but introduced some loss of fine texture. The **9×9 filter** removed a large amount of noise; however, it also caused noticeable blurring of obstacle boundaries and small structures.
+2. Laplacian Sharpening
 
-The results show the expected trade-off: increasing the kernel size improves noise suppression but reduces spatial detail. This effect was more noticeable for the image with **σ = 25**, where stronger smoothing was required.
+Laplacian sharpening was applied to the motion-blurred image using both 4-neighbor and 8-neighbor Laplacian kernels.
 
-### 2. Laplacian Sharpening
+The 4-neighbor kernel responds mainly to horizontal and vertical intensity changes, whereas the 8-neighbor kernel also responds to diagonal changes. Therefore, the 8-neighbor version generally produces stronger responses around diagonal and irregular object boundaries.
 
-Laplacian sharpening was applied to the motion-blurred image using both **4-neighbor** and **8-neighbor** Laplacian kernels.
+The Laplacian response images clearly emphasize high-frequency regions such as obstacle boundaries, edges, and fine structures affected by motion blur.
 
-The **4-neighbor Laplacian** primarily responds to intensity changes in the horizontal and vertical directions, while the **8-neighbor Laplacian** also considers diagonal intensity changes. Consequently, the 8-neighbor version produced stronger responses around diagonal and irregular object boundaries.
+3. Unsharp Masking and High-Boost Filtering
 
-The Laplacian response maps clearly highlighted obstacle boundaries and other high-frequency structures affected by motion blur. The comparison between the two variants was evaluated using both visual inspection and the calculated sharpness metric.
+Unsharp masking and high-boost filtering were tested using:
 
-### 3. Unsharp Masking and High-Boost Filtering
+k = 1 — Unsharp masking
+k = 1.5
+k = 2
+k = 3
 
-Unsharp masking was performed with **k = 1**, followed by high-boost filtering with **k = 1.5, 2, and 3**.
+As k increased, edge strength increased and boundaries became more prominent. However, excessive sharpening also amplified noise and unwanted high-frequency variations.
 
-Increasing the value of **k** increased the strength of edge enhancement. At lower values, the processed image showed improved boundary definition while retaining relatively natural appearance. As **k** increased further, fine edges became more prominent, but noise and small unwanted intensity variations were also amplified.
+Therefore, the largest value of k was not automatically considered the best. The suitable value was selected by considering both PSNR and sharpness and by observing whether additional sharpening provided useful edge enhancement or mainly amplified noise.
 
-Therefore, the highest value of **k** was not automatically considered the best configuration. The final value was selected by comparing the improvement in the sharpness metric with the corresponding PSNR and observing whether additional sharpening was actually beneficial.
+4. Quantitative Evaluation
 
-### 4. Quantitative Evaluation
+Every processed image was compared with the original clean image using two metrics.
 
-Each processed image was compared with the original clean image using two objective measures:
+PSNR
 
-* **PSNR:** Measures the similarity between the processed image and the clean ground truth. Higher PSNR generally indicates lower pixel-level reconstruction error.
-* **Sharpness:** Measured using the **variance of the Laplacian**, where a higher value indicates stronger high-frequency content and sharper edges.
+Peak Signal-to-Noise Ratio (PSNR) measures the pixel-level similarity between the processed image and the clean ground truth.
 
-The quantitative results confirmed that smoothing filters generally improved PSNR by reducing noise, while excessive smoothing reduced sharpness. Conversely, sharpening increased the sharpness metric but could reduce PSNR when noise was also amplified.
+Higher PSNR generally indicates lower reconstruction error.
 
-Thus, the results demonstrate that **PSNR and sharpness must be considered together** rather than selecting a filter based on a single metric.
+Sharpness
 
-### 5. Final Pipeline Result
+Image sharpness was measured using the variance of the Laplacian.
 
-Based on the experimental results, the recommended AGV preprocessing pipeline is:
+Higher variance indicates stronger high-frequency content and therefore stronger edges.
 
-**Degraded Input → Averaging Filter → Laplacian/Unsharp Sharpening → Enhanced Image**
+The results showed that averaging filters generally improved PSNR by reducing noise, but excessive smoothing decreased the sharpness of important boundaries.
 
-A moderate averaging filter was preferred because it provided sufficient noise suppression without excessively blurring navigation-relevant boundaries. This was followed by controlled sharpening to restore obstacle edges and improve boundary visibility.
+Sharpening increased the sharpness metric, but aggressive sharpening could decrease PSNR because noise was enhanced along with useful edges.
 
-The final configuration was selected from the tested parameters using the **PSNR–sharpness trade-off**, rather than simply choosing the configuration with the highest numerical sharpness.
+Therefore, PSNR and sharpness must be evaluated together rather than selecting a configuration using only one metric.
 
-### Overall Result
+5. Final Pipeline Recommendation
 
-The experiment demonstrates that spatial filtering can effectively improve a degraded onboard camera image, but **no single filter is optimal for all degradation conditions**. Large smoothing kernels provide better noise suppression but can destroy important edges, while aggressive sharpening can enhance both useful boundaries and unwanted noise. Therefore, a balanced combination of **moderate denoising followed by controlled sharpening** provides the most suitable preprocessing strategy for an AGV perception pipeline.
+Based on the experimental observations and quantitative evaluation, the recommended preprocessing pipeline is:
+
+Degraded AGV Camera Frame
+          ↓
+   Noise Reduction
+          ↓
+   Controlled Sharpening
+          ↓
+ Enhanced Camera Frame
+          ↓
+Obstacle Detection / Terrain Classification
+
+A moderate averaging filter is preferred for the denoising stage because it provides a good balance between noise suppression and edge preservation.
+
+This is followed by controlled sharpening using Laplacian or unsharp/high-boost filtering to restore the visibility of obstacle boundaries.
+
+The final parameters should be selected from the configuration that provides a suitable balance between high PSNR, sufficient sharpness, and preservation of navigation-relevant edges.
+
+Overall Result
+
+The experiment demonstrates that spatial filtering can significantly improve degraded AGV camera images. However, no single filter or parameter value is optimal for every degradation condition.
+
+Large averaging kernels provide stronger noise suppression but can destroy important edges. Conversely, aggressive sharpening can improve edge strength while simultaneously amplifying noise.
+
+Therefore, the experimental results support a two-stage preprocessing approach:
+
+Moderate denoising → Controlled sharpening
+
+This approach provides a practical balance between noise reduction, edge preservation, and boundary enhancement, making it suitable as a preprocessing stage for subsequent AGV tasks such as obstacle boundary detection and terrain classification.
