@@ -2,128 +2,87 @@
 
 ## Aim
 
-To implement and study basic **image enhancement transformation functions** manually and using reusable helper/tool functions, and to observe their effect on image intensity values.
+To implement basic image enhancement transformation functions **manually and using reusable helper/tool functions**, and observe their effect on image intensity values.
 
 ---
 
-## Transformations Studied
+## Transformations
 
 ### 1. Negative Transformation
-
-The negative transformation is given by:
 
 [
 S = L - 1 - r
 ]
 
-where:
-
-* `r` = input pixel intensity
-* `S` = output pixel intensity
-* `L` = number of intensity levels
-
-For an 8-bit grayscale image:
-
-[
-L = 256
-]
-
-Therefore:
+For an 8-bit image:
 
 [
 S = 255-r
 ]
 
-The transformation reverses the intensity levels. Dark pixels become bright and bright pixels become dark.
+The negative transformation reverses the intensity levels of an image.
 
 ---
 
 ### 2. Power-Law / Gamma Correction
 
-The power-law transformation is:
-
 [
 S = c(r^\gamma)
 ]
 
-where:
+Gamma correction changes image brightness non-linearly.
 
-* `r` = normalized input intensity
-* `S` = output intensity
-* `c` = scaling constant
-* `γ` = gamma value
-
-Gamma correction provides **non-linear control over image brightness**.
-
-* `γ < 1` → image becomes brighter
+* `γ < 1` → brighter image
 * `γ = 1` → approximately unchanged
-* `γ > 1` → image becomes darker
+* `γ > 1` → darker image
 
 ---
 
 ### 3. Log Transformation
 
-The log transformation is:
-
 [
 S = c\log(1+r)
 ]
 
-It expands the lower intensity values while compressing higher intensity values.
-
-This makes the transformation particularly useful when important information is concentrated in darker regions of an image.
+The log transformation expands darker intensity values and compresses brighter intensity values. It can therefore make details in dark regions more visible.
 
 ---
 
 ## Implementation
 
-Two implementations were developed:
+The experiment contains **two implementations** for each transformation.
 
 ### Manual Implementation
 
-The transformations were implemented directly using loops over the image pixels.
+The transformation is implemented using direct loops over the pixels.
 
 ```text
-Image
-  ↓
-Read pixel
-  ↓
-Apply mathematical transformation
-  ↓
-Calculate new intensity
-  ↓
-Store output pixel
+Input Image
+     ↓
+Read Pixel
+     ↓
+Apply Transformation Formula
+     ↓
+Calculate Output Intensity
+     ↓
+Store Pixel
+     ↓
+Output Image
 ```
 
-This approach demonstrates how the transformation equations operate at the individual-pixel level.
+This implementation helps understand how image enhancement works at the individual-pixel level.
 
 ### Tool / Helper Implementation
 
-Reusable helper functions were used to perform the same transformations.
+Reusable image helper functions and `map_pixels` are used to apply the transformations.
 
-The helper-based implementation reduces repeated code and makes it easier to apply different transformation functions and parameter values.
-
----
-
-## How to Run
-
-From the project root, run:
-
-```bash
-python3 "DVP/Lab 2/Code/lab2_image_enhancement.py"
-```
-
-For Windows, the following can also be used:
-
-```bash
-python "DVP/Lab 2/Code/lab2_image_enhancement.py"
-```
+This approach reduces repeated code and makes it easier to experiment with different transformations and parameters.
 
 ---
 
-## Input Dataset
+## Input
 
-The experiment uses:
+The input image used for the experiment is:
 
 ```text
 DVP/Dataset/Lab 2/sample.ppm
@@ -133,13 +92,13 @@ DVP/Dataset/Lab 2/sample.ppm
 
 ## Output
 
-All generated images are stored in:
+Generated images are saved in:
 
 ```text
 DVP/Lab 2/Image Output/
 ```
 
-The program generates results for:
+The program generates:
 
 ```text
 Original Image
@@ -151,45 +110,57 @@ Tool Gamma
 Tool Log
 ```
 
-The manual and helper-based results can be compared to verify that both implementations produce equivalent transformations.
+---
+
+## How to Run
+
+From the project root:
+
+```bash
+python3 "DVP/Lab 2/Code/lab2_image_enhancement.py"
+```
+
+On Windows:
+
+```bash
+python "DVP/Lab 2/Code/lab2_image_enhancement.py"
+```
 
 ---
 
-## Result
+## Results
 
-The experiment successfully implemented all three image enhancement transformations using both manual pixel-level processing and reusable helper functions.
+### Negative
 
-### Negative Transformation
-
-The negative transformation reversed the intensity values of the image. Bright regions became dark and dark regions became bright.
+The negative transformation reversed the intensity values. Bright regions became dark and dark regions became bright.
 
 ### Gamma Correction
 
-Gamma correction changed the image brightness according to the selected gamma value. It demonstrated that image intensity can be adjusted non-linearly rather than simply adding or subtracting a constant brightness value.
+Gamma correction modified the brightness of the image non-linearly. Different gamma values produced different levels of brightness modification.
 
 ### Log Transformation
 
-The log transformation expanded darker intensity values and compressed brighter values. As a result, details present in darker regions became more visible.
+The log transformation expanded lower intensity values and compressed higher intensity values, making information in darker regions more visible.
 
-The manual and helper-based implementations produced comparable results, demonstrating that the mathematical transformations were correctly implemented.
+The manual and helper-based implementations produced comparable transformation results.
 
 ---
 
 ## What I Learned
 
-* The **negative transformation** reverses the intensity levels of an image.
-* **Gamma correction** provides non-linear control over image brightness.
-* `γ < 1` generally brightens an image, while `γ > 1` generally darkens it.
-* **Log transformation** expands low-intensity values and compresses high-intensity values.
-* Image enhancement transformations operate by modifying the **intensity of individual pixels**.
-* Implementing the formulas manually helps in understanding the underlying image-processing operations.
-* Reusable helper functions reduce code duplication and make experimentation easier.
-* Different transformations are useful for different image characteristics and enhancement requirements.
+* Negative transformation reverses image intensity values.
+* Gamma correction provides non-linear brightness adjustment.
+* `γ < 1` generally brightens an image.
+* `γ > 1` generally darkens an image.
+* Log transformation expands dark intensity values and compresses bright intensity values.
+* Image enhancement transformations can be implemented directly at the pixel level.
+* Manual implementation helps understand the mathematical operation behind each transformation.
+* Reusable helper functions reduce code duplication and simplify experimentation.
 
 ---
 
 ## Conclusion
 
-The experiment successfully demonstrated three fundamental **intensity transformation techniques** used in digital image processing: **negative, power-law/gamma, and logarithmic transformations**.
+The experiment successfully implemented **Negative, Power-Law/Gamma, and Logarithmic transformations** using both manual pixel-level processing and reusable helper functions.
 
-Both manual and reusable helper-based implementations were developed and compared. The experiment shows how mathematical transformations can modify image intensity distributions to improve the visibility of specific features and regions in an image.
+The results demonstrate how intensity transformation functions can modify an image's intensity values to enhance specific visual characteristics and improve the visibility of important image regions.
