@@ -1,5 +1,4 @@
 Lab 1 - Basic Image Processing
-==============================
 
 Aim:
 Perform common image-processing operations and save the results for GitHub submission.
