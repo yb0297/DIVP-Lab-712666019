@@ -1,0 +1,208 @@
+
+
+============================================================
+AGV SPATIAL FILTERING LAB
+EXPERIMENT SUMMARY
+============================================================
+
+INPUT IMAGE
+------------------------------------------------------------
+
+C:\Users\yoges\Downloads\Cloudhoppers.jpg
+
+Working image size:
+(525, 700)
+
+
+TASK 0 - IMAGE DEGRADATION
+------------------------------------------------------------
+
+Gaussian noise:
+    sigma = 10
+    sigma = 25
+
+Motion blur:
+    Linear horizontal motion blur
+    Kernel length = 9 pixels
+
+
+TASK 1 - AVERAGING FILTER
+------------------------------------------------------------
+
+Kernel sizes:
+    3 x 3
+    5 x 5
+    9 x 9
+
+The averaging filter suppresses random noise by replacing
+each pixel with the local average.
+
+As kernel size increases:
+    - noise suppression generally increases
+    - fine details are increasingly blurred
+    - navigation-relevant edges can become weaker
+
+
+TASK 2 - LAPLACIAN SHARPENING
+------------------------------------------------------------
+
+4-neighbor Laplacian:
+
+[ 0 -1  0 ]
+[-1  4 -1 ]
+[ 0 -1  0 ]
+
+8-neighbor Laplacian:
+
+[-1 -1 -1]
+[-1  8 -1]
+[-1 -1 -1]
+
+The 4-neighbor version mainly responds to horizontal and
+vertical neighboring intensity changes.
+
+The 8-neighbor version also includes diagonal neighbors,
+making it sensitive to diagonal structures.
+
+
+TASK 3 - UNSHARP MASKING / HIGH-BOOST
+------------------------------------------------------------
+
+Boost factors tested:
+
+    k = 1.0
+    k = 1.5
+    k = 2.0
+    k = 3.0
+
+The high-boost operation was:
+
+    g(x,y) = f(x,y) + k[f(x,y) - f_blurred(x,y)]
+
+Increasing k strengthens high-frequency components.
+
+However, excessive k can also amplify noise.
+
+
+TASK 4 - OBJECTIVE METRICS
+------------------------------------------------------------
+
+PSNR:
+Peak Signal-to-Noise Ratio.
+
+Higher PSNR indicates lower pixel-wise error relative
+to the clean ground-truth image.
+
+Sharpness:
+Variance of the 4-neighbor Laplacian response.
+
+Higher sharpness indicates stronger high-frequency
+components. However, noise can also increase this metric.
+
+
+BEST PSNR CONFIGURATION
+------------------------------------------------------------
+
+Task:
+Task 1 - Averaging
+
+Noise:
+sigma=10
+
+Parameter:
+3x3
+
+PSNR:
+33.8905 dB
+
+Sharpness:
+55.5565
+
+
+HIGHEST SHARPNESS CONFIGURATION
+------------------------------------------------------------
+
+Task:
+Task 3 - High Boost
+
+Noise:
+sigma=10
+
+Parameter:
+k=3.0
+
+PSNR:
+16.1518 dB
+
+Sharpness:
+32168.2954
+
+
+TASK 5 - PIPELINE
+------------------------------------------------------------
+
+Recommended starting pipeline:
+
+    Gaussian-noisy input
+             |
+             v
+       5 x 5 Averaging
+             |
+             v
+       High-Boost k=1.5
+             |
+             v
+       Enhanced image
+
+
+The final choice should consider both PSNR and sharpness,
+because maximizing sharpness alone can amplify noise.
+
+
+PIPELINE ORDER COMPARISON
+------------------------------------------------------------
+
+Denoise -> Sharpen:
+
+PSNR:
+32.1597 dB
+
+Sharpness:
+67.5646
+
+
+Sharpen -> Denoise:
+
+PSNR:
+32.0797 dB
+
+Sharpness:
+62.4963
+
+
+REFLECTION QUESTION 4
+------------------------------------------------------------
+
+Additional noise levels tested:
+
+sigma = 25
+sigma = 40
+sigma = 60
+sigma = 80
+
+The results are stored in:
+
+extra_noise_results.csv
+
+
+OUTPUT LOCATION
+------------------------------------------------------------
+
+All experiment files are stored in:
+
+C:\Users\yoges\Downloads\AGV_Spatial_Filtering_Output
+
+
+============================================================
+END OF EXPERIMENT SUMMARY
+============================================================

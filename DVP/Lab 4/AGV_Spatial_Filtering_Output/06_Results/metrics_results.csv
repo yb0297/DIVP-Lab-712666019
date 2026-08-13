@@ -1,0 +1,13 @@
+Task,Noise,Parameter,PSNR_dB,Sharpness
+Task 1 - Averaging,sigma=10,3x3,33.8905,55.5565
+Task 1 - Averaging,sigma=10,5x5,32.8973,11.9857
+Task 1 - Averaging,sigma=10,9x9,30.83,2.1351
+Task 1 - Averaging,sigma=25,3x3,28.8451,259.2407
+Task 1 - Averaging,sigma=25,5x5,30.7388,51.6386
+Task 1 - Averaging,sigma=25,9x9,30.265,8.4829
+Task 2 - Laplacian,Motion Blur,4-neighbor,30.9127,243.4157
+Task 2 - Laplacian,Motion Blur,8-neighbor,27.318,915.5183
+Task 3 - High Boost,sigma=10,k=1.0,22.0488,8655.5984
+Task 3 - High Boost,sigma=10,k=1.5,20.0921,13319.5488
+Task 3 - High Boost,sigma=10,k=2.0,18.5276,18858.1974
+Task 3 - High Boost,sigma=10,k=3.0,16.1518,32168.2954
