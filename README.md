@@ -17,6 +17,4 @@ This repository contains a GitHub-ready structure for DVP practical submissions.
 - How to compare manual pixel-by-pixel implementation with reusable helper/tool-based implementation.
 - How to organize lab code, datasets, output images, and README files for GitHub submission.
 
-## PR compatibility
 
-All generated datasets and result images are stored as plain-text `.ppm` or `.svg` files so GitHub PR creation does not fail because of binary image files.
